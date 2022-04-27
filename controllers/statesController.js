@@ -26,11 +26,11 @@ const getNonContiguousStateData = async (req, res) =>
 // /states/:state (All data for the state URL parameter)
 const getState = async (req, res) => 
 {
-    if (!req?.params?.state) return res.status(400).json({ message: 'State code is required.' });
+    if (!req?.params?.state) return res.status(400).json({ message: "State code is required."});
     
     const state = statesJson.find((state) => state.code === req.params.state);
 
-    if (!state) return res.status(400).json({message: 'State does not exist.'});
+    if (!state) return res.status(400).json({message: "State does not exist."});
 
     const jsonResults = await States.find({ statecode: req.params.state });
 
@@ -68,11 +68,11 @@ const getRandomFunFact = async (req, res) =>
 // /states/:state/capital { ‘state’: stateName, ‘capital’: capitalName }
 const getCapital = (req, res) => 
 {
-    if (!req?.params?.state) return res.status(400).json({ message: 'State code is required' });
+    if (!req?.params?.state) return res.status(400).json({ message: "State code is required"});
   
     const state = statesJson.find((state) => state.code === req.params.state);
 
-    if (!state) return res.status(400).json({message: 'State does not exist.'});
+    if (!state) return res.status(400).json({message: "State does not exist."});
   
     res.json({
       state: state.state,
@@ -85,7 +85,7 @@ const getCapital = (req, res) =>
   {
     if (!req?.params?.state) 
     {
-        return res.status(400).json({ message: 'State code is required' });
+        return res.status(400).json({ message: "State code is required"});
     }
   
     const state = statesJson.find((state) => state.code === req.params.state);
@@ -99,7 +99,7 @@ const getCapital = (req, res) =>
   // /states/:state/population { ‘state’: stateName, ‘population’: population }
   const getPopulation = (req, res) => 
   {
-    if (!req?.params?.state)  return res.status(400).json({ message: 'State code is required' });
+    if (!req?.params?.state)  return res.status(400).json({message: "State code is required"});
   
     const state = statesJson.find((state) => state.code === req.params.state);
   
@@ -114,7 +114,7 @@ const getCapital = (req, res) =>
   {
     if (!req?.params?.state) 
     {
-        return res.status(400).json({ message: 'State code is required' });
+        return res.status(400).json({message: "State code is required"});
     }
   
     const state = statesJson.find((state) => state.code === req.params.state);
@@ -130,11 +130,11 @@ const getCapital = (req, res) =>
 // /states/:state/funfact The result received from MongoDB
 const createNewFunFact = async (req, res) => 
 {
-    if (!req?.body?.funfacts) return res.status(400).json({ 'message': 'Fun fact is required.' });
+    if (!req?.body?.funfacts) return res.status(400).json({message: "Fun fact is required."});
 
     if (!Array.isArray(req.body.funfacts)) 
     {
-      return res.status(400).json({message: 'Must be an array'});
+      return res.status(400).json({message: "Must be an array"});
     }
 
     const state = await States.findOne({ stateCode: req.params.state }).exec();
@@ -174,8 +174,60 @@ const createNewFunFact = async (req, res) =>
 
 const replaceFunFact = async (req, res) =>
 {
-  // TODO:
-  console.log("TODO");
+  const index = req?.body?.index;
+  const stCode = req?.params?.state;
+  const funfact = req?.body?.funfact;
+
+  if (!index) 
+  {
+    return res.status(400).json
+    (
+      {
+        message: "Index required.",
+      }
+    );
+  }
+  if (!funfact) 
+  {
+    return res.status(400).json(
+      {
+        message: "Fun fact required.",
+      }
+    );
+  }
+
+  const state = await States.findOne({stateCode: stCode}).exec();
+
+  if (!state) // No funfact found
+  {
+    // Map the name of the state with the state code
+    const stateName = statesJson.find
+    (
+      (state) => state.code === stCode
+    ).state;
+
+    res.json({message: `No fun facts found for ${stateName}`});
+  } 
+  else if (!state.funfacts[index]) 
+  {
+    const stateName = statesJson.find
+    (
+      (state) => state.code === stCode
+    ).state;
+
+    res.json({message: `No fun facts found at index ${index} for ${stateName}`});
+  } 
+  else 
+  {
+    // Modify the found entry
+    state.funfacts[index] = funfact;
+
+    // Save the modified entry
+    const result = await state.save();
+
+    // Return the saved results
+    res.json(result);
+  }
 }
 
 // DELETE request
