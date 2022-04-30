@@ -10,7 +10,6 @@ const getAllStateData = async (req, res) =>
   // param to hold contig value
   let contig = req.query?.contig;
   let statesList;
-  let mergedResult = [];
 
   let mongoStates = await States.find();
 
@@ -45,11 +44,23 @@ const getAllStateData = async (req, res) =>
 // /states/:state (All data for the state URL parameter)
 const getState = async (req, res) => 
 {
+  let statesList;
+  let mongoStates = await States.find();
+
     if (!req?.params?.state) return res.status(400).json({ message: "State code is required."});
     
     const state = statesJson.find((state) => state.code === req.params.state.toUpperCase());
 
     if (!state) return res.status(400).json({message: "Invalid state abbreviation parameter"});
+
+    // attempt to find the state from the MongoDB states results
+    const stateExists = mongoStates.find(st => st.stateCode === state.code)
+
+    // attach the 'funfacts' to the state object.
+    if (stateExists)
+    {
+      state.funfacts = stateExists.funfacts;
+    }
 
     res.json(state);
   };
