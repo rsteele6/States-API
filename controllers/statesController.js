@@ -37,10 +37,6 @@ const getAllStateData = async (req, res) =>
     {
       state.funfacts = stateExists.funfacts;
     }
-    else
-    {
-      state.funfacts = [];
-    }
   });
 
   res.json(statesList);
