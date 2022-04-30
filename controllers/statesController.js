@@ -3,36 +3,59 @@ const statesJson = require('../model/states.json');
 
 // GET requests
 
-// /states/ (return all state data)
-const getAllStateData = (req, res) => 
-{
-    res.json(statesJson);
-}
 
-// /states/?contig=true All state data for contiguous states (Not AK or HI)
-const getContiguousStateData = async (req, res) =>
+///states/ (return all state data)
+const getAllStateData = async (req, res) =>
 {
-  //TODO:
-  console.log("TODO");
-}
+  // param to hold contig value
+  let contig = req.query?.contig;
+  let statesList;
+  let mergedResult = [];
 
-// /states/?contig=false All state data for non-contiguous states (AK, HI)
-const getNonContiguousStateData = async (req, res) =>
-{
-  //TODO:
-  console.log("TODO");
-}
+  let mongoStates = await States.find();
 
+  if (contig === 'false'.toLowerCase())
+  {
+    statesList = statesJson.filter(st => st.code === 'AK' || st.code === 'HI')
+  }
+  else if (contig === 'true'.toLowerCase())
+  {
+    statesList = statesJson.filter(st => st.code !== 'AK' && st.code !== 'HI')
+  }
+  else
+  {
+    statesList = statesJson; // all results
+  }
+  
+  statesList.forEach(state => 
+    {
+    // attempt to find the state from the MongoDB states results
+    const stateExists = mongoStates.find(st => st.stateCode === state.code)
+
+    // attach the 'funfacts' to the state object.
+    if (stateExists)
+    {
+      state.funfacts = stateExists.funfacts;
+    }
+    else
+    {
+      state.funfacts = [];
+    }
+  });
+
+  res.json(statesList);
+
+}
 // /states/:state (All data for the state URL parameter)
 const getState = async (req, res) => 
 {
     if (!req?.params?.state) return res.status(400).json({ message: "State code is required."});
     
-    const state = statesJson.find((state) => state.code === req.params.state);
+    const state = statesJson.find((state) => state.code === req.params.state.toUpperCase());
 
     if (!state) return res.status(400).json({message: "State does not exist."});
 
-    const jsonResults = await States.find({ statecode: req.params.state });
+    const jsonResults = await States.find({ statecode: req.params.state.toUpperCase() });
 
     res.json(state);
   };
@@ -235,16 +258,53 @@ const replaceFunFact = async (req, res) =>
 // /states/:state/funfact The result received from MongoDB
 const deleteFunFact = async (req, res) =>
 {
-  // TODO:
-  console.log("TODO");
-}
+  const index = req?.body?.index;
+  const stCode = req?.params?.state;
+  
+  // Ensure all required parameters were provided
+  if (!index) 
+  {
+    return res.status(400).json
+    (
+      {
+        message: "Index required."
+      }
+    );
+  }
 
+  const state = await States.findOne({statecode: stCode}).exec();
+
+  if (!state) 
+  {
+    const stateName = statesJson.find
+    (
+      (state) => state.code === stCode
+    ).state;
+
+    res.json({message: `No fun facts found for ${stateName}` });
+  } 
+  else if (!state.funfacts[index]) 
+  {
+    const stateName = statesJson.find
+    (
+      (state) => state.code === stCode
+    ).state;
+
+    res.json({message: `No fun fact found at index ${index} for ${stateName}`});
+  } 
+  else 
+  {
+    state.funfacts.splice(index, 1);
+
+    const result = await state.save();
+
+    res.json(result);
+  }
+}
 
 module.exports = {
 
     getAllStateData,
-    getContiguousStateData,
-    getNonContiguousStateData,
     getRandomFunFact,
     getState,
     getCapital,
