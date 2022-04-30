@@ -227,7 +227,7 @@ const replaceFunFact = async (req, res) =>
 
     res.json({message: `No fun facts found for ${stateName}`});
   } 
-  else if (!state.funfacts[index]) 
+  else if (!state.funfacts[index - 1]) 
   {
     const stateName = statesJson.find
     (
@@ -239,7 +239,7 @@ const replaceFunFact = async (req, res) =>
   else 
   {
     // Modify the found entry
-    state.funfacts[index] = funfact;
+    state.funfacts[index - 1] = funfact;
 
     // Save the modified entry
     const result = await state.save();
@@ -279,7 +279,7 @@ const deleteFunFact = async (req, res) =>
 
     res.json({message: `No fun facts found for ${stateName}` });
   } 
-  else if (!state.funfacts[index]) 
+  else if (!state.funfacts[index - 1]) 
   {
     const stateName = statesJson.find
     (
@@ -290,7 +290,7 @@ const deleteFunFact = async (req, res) =>
   } 
   else 
   {
-    state.funfacts.splice(index, 1);
+    state.funfacts.splice(index - 1, 1);
 
     const result = await state.save();
 
