@@ -49,9 +49,7 @@ const getState = async (req, res) =>
     
     const state = statesJson.find((state) => state.code === req.params.state.toUpperCase());
 
-    if (!state) return res.status(400).json({message: "State does not exist."});
-
-    const jsonResults = await States.find({ statecode: req.params.state.toUpperCase() });
+    if (!state) return res.status(400).json({message: "Invalid state abbreviation parameter"});
 
     res.json(state);
   };
@@ -70,7 +68,7 @@ const getRandomFunFact = async (req, res) =>
       (state) => state.code === req.params.state
     ).state;
 
-  res.json({message: `No fun facts found for ${stName}`});
+  res.json({message: `No Fun Facts found for ${stName}`});
 } 
 
   else 
@@ -120,11 +118,11 @@ const getCapital = (req, res) =>
   {
     if (!req?.params?.state)  return res.status(400).json({message: "State code is required"});
   
-    const state = statesJson.find((state) => state.code === req.params.state);
+    const state = statesJson.find((state) => state.code === req.params.state.toUpperCase());
   
     res.json({
       state: state.state,
-      population: state.population,
+      population: state.population.toLocaleString(),
     });
   };
 
@@ -149,11 +147,11 @@ const getCapital = (req, res) =>
 // /states/:state/funfact The result received from MongoDB
 const createNewFunFact = async (req, res) => 
 {
-    if (!req?.body?.funfacts) return res.status(400).json({message: "Fun fact is required."});
+    if (!req?.body?.funfacts) return res.status(400).json({message: "State fun facts value required"});
 
     if (!Array.isArray(req.body.funfacts)) 
     {
-      return res.status(400).json({message: "Must be an array"});
+      return res.status(400).json({message: "State fun facts value must be an array"});
     }
 
     const state = await States.findOne({ stateCode: req.params.state }).exec();
@@ -202,7 +200,7 @@ const replaceFunFact = async (req, res) =>
     return res.status(400).json
     (
       {
-        message: "Index required.",
+        message: "State fun fact index value required",
       }
     );
   }
@@ -210,7 +208,7 @@ const replaceFunFact = async (req, res) =>
   {
     return res.status(400).json(
       {
-        message: "Fun fact required.",
+        message: "State fun fact value required",
       }
     );
   }
@@ -225,7 +223,7 @@ const replaceFunFact = async (req, res) =>
       (state) => state.code === stCode
     ).state;
 
-    res.json({message: `No fun facts found for ${stateName}`});
+    res.json({message: `No Fun Facts found for ${stateName}`});
   } 
   else if (!state.funfacts[index - 1]) 
   {
@@ -234,7 +232,7 @@ const replaceFunFact = async (req, res) =>
       (state) => state.code === stCode
     ).state;
 
-    res.json({message: `No fun facts found at index ${index} for ${stateName}`});
+    res.json({message: `No Fun Fact found at that index for ${stateName}`});
   } 
   else 
   {
@@ -263,7 +261,7 @@ const deleteFunFact = async (req, res) =>
     return res.status(400).json
     (
       {
-        message: "Index required."
+        message: "State fun fact index value required"
       }
     );
   }
@@ -277,7 +275,7 @@ const deleteFunFact = async (req, res) =>
       (state) => state.code === stCode
     ).state;
 
-    res.json({message: `No fun facts found for ${stateName}` });
+    res.json({message: `No Fun Facts found for ${stateName}` });
   } 
   else if (!state.funfacts[index - 1]) 
   {
@@ -286,7 +284,7 @@ const deleteFunFact = async (req, res) =>
       (state) => state.code === stCode
     ).state;
 
-    res.json({message: `No fun fact found at index ${index} for ${stateName}`});
+    res.json({message: `No Fun Fact found at that index for ${stateName}`});
   } 
   else 
   {
