@@ -275,7 +275,7 @@ const deleteFunFact = async (req, res) =>
       (state) => state.code === stCode
     ).state;
 
-    res.json({message: `No Fun Fact found at that index for ${stateName}` });
+    res.json({message: `No Fun Facts found for ${stateName}`});
   } 
   else if (!state.funfacts[index - 1]) 
   {
@@ -284,7 +284,7 @@ const deleteFunFact = async (req, res) =>
       (state) => state.code === stCode
     ).state;
 
-    res.json({message: `No Fun Facts found for ${stateName}`});
+    res.json({message: `No Fun Fact found at that index for ${stateName}` });
   } 
   else 
   {
