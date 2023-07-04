@@ -9,8 +9,7 @@ const cors = require('cors');
 // const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('./config/dbConn');
 
-// const PORT = process.env.PORT || 3500;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3500;
 
 // Cross Origin Resource Sharing
 //app.use(cors(corsOptions));
