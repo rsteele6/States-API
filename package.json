@@ -2,10 +2,10 @@
   "name": "states-api",
   "version": "1.0.0",
   "description": "States API Final Project",
-  "main": "server.js",
+  "main": "root.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server"
+    "start": "node root",
+    "dev": "nodemon root"
   },
   "author": "Rebecca Steele",
   "license": "ISC",
@@ -14,13 +14,14 @@
     "date-fns": "^2.23.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
+    "mongodb": "4.0",
     "mongoose": "^6.3.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.12"
+    "nodemon": "^1.14.9"
   },
   "engines": {
-    "node": "14.x"
+    "node": "18.x"
   }
 }
