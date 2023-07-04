@@ -2,10 +2,10 @@
   "name": "states-api",
   "version": "1.0.0",
   "description": "States API Final Project",
-  "main": "root.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node root",
-    "dev": "nodemon root"
+    "start": "node server",
+    "dev": "nodemon server"
   },
   "author": "Rebecca Steele",
   "license": "ISC",
