@@ -78,7 +78,7 @@ const getRandomFunFact = async (req, res) =>
       (state) => state.code === req.params.state
     ).state;
 
-  res.json({message: `No Fun Facts found for ${stName}`});
+  res.status(400).json({message: `No Fun Facts found for ${stName}`});
 } 
 
   else 
