@@ -17,8 +17,9 @@ h1 {
     padding-bottom: 1em;
 }
 
-table {
+table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
     padding: 5px;
 }
+
