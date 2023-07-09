@@ -10,7 +10,63 @@
 </head>
 
 <body>
-    <h1>Final Project</h1>
+    <h1>Endpoints</h1>
+    <table>
+        <tr>
+            <th>Method(s)</th>
+            <th>Request</th>
+            <th>Response</th>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/</td>
+            <td>All state data returned</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/?contig=true</td>
+            <td>All state data for contiguous states (Not AK or HI)</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/?contig=false</td>
+            <td>All state data for non-contiguous states (AK, HI)</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/:state</td>
+            <td>All data for the given state</td>
+        </tr>
+        <tr>
+            <td>GET, POST, PATCH, DELETE</td>
+            <td>/states/:state/funfact</td>
+            <td>A random fun fact for the state URL parameter</td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/:state/capital</td>
+            <td><code>{ ‘state’: stateName, ‘capital’: capitalName }</code>></td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/:state/nickname</td>
+            <td><code>{ ‘state’: stateName, ‘nickname’: nickname }</code>></td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/:state/population</td>
+            <td><code>{ ‘state’: stateName, ‘population’: population }</code></td>
+        </tr>
+        <tr>
+            <td>GET</td>
+            <td>/states/:state/admission</td>
+            <td><code>{ ‘state’: stateName, ‘admitted’: admissionDate }</code></td>
+        </tr>
+
+    </table>
+
+
+
 </body>
 
 </html>

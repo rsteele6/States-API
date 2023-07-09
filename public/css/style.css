@@ -12,3 +12,9 @@ body {
     display: grid;
     place-content: center;
 }
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+}
