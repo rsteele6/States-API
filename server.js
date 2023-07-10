@@ -4,24 +4,15 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
-// const corsOptions = require('./config/corsOptions');
-// const { logger } = require('./middleware/logEvents');
-// const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('./config/dbConn');
 
 const PORT = process.env.PORT || 3500;
-
-// Cross Origin Resource Sharing
-//app.use(cors(corsOptions));
 
 app.use(cors());
 
 // Connect to DB
 
 connectDB();
-
-// // custom middleware logger
-// app.use(logger);
 
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
@@ -48,10 +39,6 @@ app.all('*', (req, res) => {
         res.type('txt').send("404 Not Found");
     }
 });
-
-
-
-// app.use(errorHandler);
 
 mongoose.connection.once('open', () =>
 {
