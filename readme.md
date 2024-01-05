@@ -2,7 +2,7 @@
 
 ## Overview
 
-This API was created as a final project for INF653 at Fort Hays State University. It enables you to retrieve, add, update and delete specific data points about a single US state, or all of them.
+This API was created as a school project. It enables you to retrieve, add, update and delete specific data points about a single US state, or all of them.
 
 ## Tech stack
 - NodeJS
